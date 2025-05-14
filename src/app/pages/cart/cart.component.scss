@@ -1,0 +1,216 @@
+// cart.component.scss
+@use '@angular/material' as mat;
+
+// Először importáljuk a szükséges Material modulokat
+@include mat.core();
+
+// Színpaletták definiálása
+$my-primary: mat.define-palette(mat.$indigo-palette);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$my-warn: mat.define-palette(mat.$red-palette);
+
+// Téma létrehozása
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+   warn: $my-warn,
+ ),
+ typography: mat.define-typography-config(),
+ density: 0,
+));
+
+// Téma alkalmazása
+@include mat.all-component-themes($my-theme);
+
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: mat.get-color-from-palette(mat.$brown-palette, 500);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 40px;
+  margin-top: 20px;
+  
+  p {
+    color: mat.get-color-from-palette(mat.$brown-palette, 500);
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+  }
+}
+
+.cart-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  @include mat.elevation(2);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    @include mat.elevation(4);
+    transform: translateY(-2px);
+  }
+  
+  .item-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+    align-self: center;
+  }
+  
+  .item-main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .item-details {
+    .item-name {
+      color: mat.get-color-from-palette(mat.$deep-orange-palette, 900);
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    .item-description {
+      color: mat.get-color-from-palette(mat.$brown-palette, 500);
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .item-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  .item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    button {
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+      border-radius: 50%;
+    }
+  }
+  
+  .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: mat.get-color-from-palette(mat.$deep-orange-palette, 900);
+  }
+}
+
+.cart-summary {
+  margin-top: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 8px;
+  @include mat.elevation(2);
+  
+  .total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    align-items: center;
+    
+    h3 {
+      color: mat.get-color-from-palette(mat.$brown-palette, 500);
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    
+    .total-price {
+      color: mat.get-color-from-palette(mat.$deep-orange-palette, 900);
+      font-weight: 500;
+      font-size: 1.4rem;
+    }
+  }
+  
+  .actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    
+    button {
+      flex: 1;
+      min-width: 200px;
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .cart-item {
+    flex-direction: column;
+    
+    .item-image {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+    }
+    
+    .item-controls {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+  
+  .actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-item {
+    .item-quantity {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+}

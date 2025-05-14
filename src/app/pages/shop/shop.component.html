@@ -1,0 +1,13 @@
+<div class="container">
+    <h1>Csempe Választékunk</h1>
+    <p>Válasszon kedvére a kínálatunkból<br>Minőségi anyagok, kiváló áron</p>
+    
+    <div class="product-grid">
+        @for (product of products; track product.id) {
+            <app-product 
+                [product]="product"
+                (addToCartEvent)="addToCart($event)">
+            </app-product>
+        }
+    </div>
+</div>

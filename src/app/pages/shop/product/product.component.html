@@ -1,0 +1,21 @@
+<div class="product-card" [ngClass]="{'featured-product': product.featured}">
+    <img [src]="product.image" [alt]="product.name" class="product-image">
+    <h3 class="product-name">{{product.name}}</h3>
+    <p class="product-description">{{product.description}}</p>
+    <div class="price-container">
+        <p class="product-price">
+            <span [ngStyle]="{
+                'text-decoration': product.discount ? 'line-through' : 'none',
+                'color': product.discount ? '#999' : 'rgb(94, 40, 40)'
+            }">
+                {{product.price | currency:'HUF':'symbol':'1.0-0'}}
+            </span>
+            @if (product.discount) {
+                <span class="discount-info">
+                    {{product.price | discountPrice:product.discount}}
+                </span>
+            }
+        </p>
+    </div>
+    <button class="shop" (click)="onAddToCart()">Kosárba</button>
+</div>

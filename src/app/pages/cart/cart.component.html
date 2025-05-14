@@ -1,0 +1,82 @@
+<div class="container">
+  <h1>Bevásárló Kosaram</h1>
+  
+  @if (cartService.cartItems$ | async; as items) {
+    @if (items.length === 0) {
+      <mat-card class="empty-cart">
+        <mat-card-content>
+          <p>A kosarad üres</p>
+          <button mat-raised-button color="primary" routerLink="/products">
+            <mat-icon>arrow_back</mat-icon>
+            Vissza a termékekhez
+          </button>
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <div class="cart-items-container">
+        @for (item of items; track item.id) {
+          <mat-card class="cart-item">
+            <img [src]="item.image" [alt]="item.name" class="item-image">
+            
+            <div class="item-main-content">
+              <div class="item-details">
+                <h3 class="item-name">{{item.name}}</h3>
+                <p class="item-description">{{item.description}}</p>
+              </div>
+              
+              <div class="item-controls">
+                <div class="item-price">{{formatPrice(item.price)}}</div>
+                
+                <div class="item-quantity">
+                  <button mat-icon-button 
+                          (click)="cartService.updateQuantity(item.id, item.quantity - 1)" 
+                          [disabled]="item.quantity <= 1">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <span>{{item.quantity}}</span>
+                  <button mat-icon-button 
+                          (click)="cartService.updateQuantity(item.id, item.quantity + 1)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                
+                <div class="item-total">{{formatPrice(item.price * item.quantity)}}</div>
+              </div>
+            </div>
+            
+            <button mat-icon-button 
+                    class="remove-btn" 
+                    (click)="cartService.removeFromCart(item.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-card>
+        }
+
+        <mat-divider></mat-divider>
+
+        <mat-card class="cart-summary">
+          <mat-card-content>
+            <div class="total">
+              <h3>Összesen:</h3>
+              <span class="total-price">{{formatPrice(cartService.getTotal())}}</span>
+            </div>
+            <div class="actions">
+              <button mat-raised-button 
+                      color="warn" 
+                      (click)="cartService.clearCart()">
+                <mat-icon>delete</mat-icon>
+                Kosár ürítése
+              </button>
+              <button mat-raised-button 
+                      color="primary" 
+                      class="checkout">
+                <mat-icon>payment</mat-icon>
+                Tovább a fizetéshez
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    }
+  }
+</div>
