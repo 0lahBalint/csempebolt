@@ -1,13 +1,16 @@
-<app-menu (selectedPage)="changePage($event)"></app-menu>
-@if (page === "home") {
-  <app-home></app-home>
-} @else if (page === "shop") {
-  <app-shop></app-shop>
-} @else if (page === "cart") {
-  <app-cart></app-cart>
-} @else if (page === "profile"){
-  <app-profile></app-profile>
-} @else {
-  <h1>Page not found...</h1>
-}
-<!--<router-outlet /><>-->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <app-menu [sidenav]="sidenav" [isLoggedIn]="isLoggedIn" (logoutEvent)="logout()"></app-menu>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button 
+        mat-button 
+        (click)="onToggleSidenav(sidenav)"
+        class="menu-toggle-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

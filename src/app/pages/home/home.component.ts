@@ -1,11 +1,23 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  isLoggedIn: boolean = false;
 
+  constructor(private router: Router) {
+    // Ellenőrizzük a bejelentkezési állapotot
+    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  navigateToShop() {
+    this.router.navigate(['/shop']);
+  }
 }

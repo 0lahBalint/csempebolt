@@ -24,6 +24,10 @@ export class CartService {
     this.cartItems.next([...currentItems]);
   }
 
+  getCartItems(): Product[] {
+    return this.cartItems.value;
+  }
+  
   removeFromCart(productId: number) {
     const currentItems = this.cartItems.value.filter(item => item.id !== productId);
     this.cartItems.next([...currentItems]);

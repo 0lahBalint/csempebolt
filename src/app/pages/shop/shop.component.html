@@ -1,13 +1,101 @@
-<div class="container">
-    <h1>Csempe Választékunk</h1>
-    <p>Válasszon kedvére a kínálatunkból<br>Minőségi anyagok, kiváló áron</p>
+<div class="shop-container">
+  <!-- Fejléc -->
+  <mat-toolbar color="primary" class="shop-header">
+    <span class="header-title">Csempe Választékunk</span>
+    <span class="spacer"></span>
+  
+    <!-- Rendezési menü -->
+    <button mat-icon-button [matMenuTriggerFor]="sortMenu" matTooltip="Rendezés">
+      <mat-icon>sort</mat-icon>
+    </button>
+    <mat-menu #sortMenu="matMenu">
+      <button mat-menu-item (click)="sortByPrice('asc')">
+        <mat-icon>arrow_upward</mat-icon>
+        <span>Ár szerint növekvő</span>
+      </button>
+      <button mat-menu-item (click)="sortByPrice('desc')">
+        <mat-icon>arrow_downward</mat-icon>
+        <span>Ár szerint csökkenő</span>
+      </button>
+      <button mat-menu-item (click)="sortByName()">
+        <mat-icon>sort_by_alpha</mat-icon>
+        <span>Név szerint</span>
+      </button>
+    </mat-menu>
     
-    <div class="product-grid">
-        @for (product of products; track product.id) {
-            <app-product 
-                [product]="product"
-                (addToCartEvent)="addToCart($event)">
-            </app-product>
+    <!-- Kosár ikon -->
+    <button mat-icon-button 
+        [matBadge]="cartItemCount" 
+        matBadgeColor="accent"
+        (click)="navigateToCart()">
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Bevezető -->
+  <mat-card class="intro-card">
+    <mat-card-content>
+      <p class="intro-text">Válasszon kedvére a kínálatunkból</p>
+      <p class="intro-subtext">Minőségi anyagok, kiváló áron</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Szűrők -->
+  <div class="controls-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Termék keresése</mat-label>
+      <input matInput 
+            #searchInput 
+            [(ngModel)]="searchTerm" 
+            placeholder="Keresés..."
+            aria-label="Termék keresése">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="filter-section">
+      <mat-chip-listbox multiple class="category-filter" aria-label="Kategória szűrő">
+        @for (category of uniqueCategories; track category.id) {
+          <mat-chip-option (click)="toggleCategoryFilter(category.id)">
+            {{category.name}}
+          </mat-chip-option>
         }
+      </mat-chip-listbox>
     </div>
+    
+    <mat-slide-toggle [(ngModel)]="showOnlyFeatured" class="featured-toggle">
+      Csak kiemelt termékek
+    </mat-slide-toggle>
+  </div>
+
+  <!-- Tartalom -->
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-progress-spinner diameter="50" mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+  } @else {
+    <div class="product-grid">
+      @for (product of filteredProducts | productSearch:searchTerm; track product.id) {
+        <app-product
+          [product]="product"
+          (addToCartEvent)="addToCart($event)"
+          (editProductEvent)="updateProduct($event)"
+          (deleteProductEvent)="deleteProduct($event)"
+          class="product-item">
+        </app-product>
+      }
+    </div>
+    
+    <div class="actions-footer">
+      <mat-paginator
+        [length]="filteredProducts.length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+      
+      <button mat-raised-button color="primary" (click)="createNewProduct()" class="new-product-btn">
+        Új termék
+      </button>
+    </div>
+  }
 </div>

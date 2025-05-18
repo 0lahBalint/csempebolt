@@ -6,7 +6,7 @@
       <mat-card class="empty-cart">
         <mat-card-content>
           <p>A kosarad üres</p>
-          <button mat-raised-button color="primary" routerLink="/products">
+          <button mat-raised-button color="primary" (click)="navigateToShop()">
             <mat-icon>arrow_back</mat-icon>
             Vissza a termékekhez
           </button>
@@ -70,6 +70,7 @@
               <button mat-raised-button 
                       color="primary" 
                       class="checkout">
+                      (click)="cartService.clearCart()">
                 <mat-icon>payment</mat-icon>
                 Tovább a fizetéshez
               </button>
