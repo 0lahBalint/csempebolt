@@ -1,11 +1,10 @@
-/* cart.component.scss */
 .container {
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
-  
+
   h1 {
-    color: rgb(94, 40, 40); // Sötét vörösesbarna
+    color: rgb(94, 40, 40);
     font-size: 2.2rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -20,29 +19,29 @@
   margin: 20px auto;
   max-width: 500px;
   border-radius: 12px;
-  background-color: rgba(139, 107, 82, 0.08); // Világosabb barna árnyalat
-  
+  background-color: rgba(139, 107, 82, 0.08);
+
   p {
-    color: rgb(139, 107, 82); // Középső barna
+    color: rgb(139, 107, 82);
     font-size: 1.2rem;
     margin-bottom: 24px;
   }
-  
+
   button[mat-raised-button] {
-    background-color: rgb(94, 40, 40); // Sötét vörösesbarna
+    background-color: rgb(94, 40, 40);
     color: white;
     padding: 8px 24px;
     font-size: 1rem;
-    
+
     mat-icon {
       margin-right: 8px;
       font-size: 20px;
       height: 20px;
       width: 20px;
     }
-    
+
     &:hover {
-      background-color: rgb(139, 107, 82); // Középső barna
+      background-color: rgb(139, 107, 82);
     }
   }
 }
@@ -58,89 +57,90 @@
   padding: 16px;
   position: relative;
   transition: box-shadow 0.3s ease;
-  
+
   &:hover {
-    box-shadow: 0 4px 12px rgba(94, 40, 40, 0.15); // Sötét árnyék
+    box-shadow: 0 4px 12px rgba(94, 40, 40, 0.15);
   }
-  
+
   .item-image {
     width: 120px;
     height: 120px;
     object-fit: cover;
     border-radius: 8px;
     margin-right: 20px;
-    border: 1px solid rgba(139, 107, 82, 0.2); // Világos barna keret
+    border: 1px solid rgba(139, 107, 82, 0.2);
   }
-  
+
   .item-main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
   }
-  
+
   .item-details {
     h3 {
-      color: rgb(94, 40, 40); // Sötét vörösesbarna
+      color: rgb(94, 40, 40);
       margin: 0 0 8px 0;
       font-size: 1.2rem;
       font-weight: 500;
     }
-    
+
     p {
-      color: rgb(139, 107, 82); // Középső barna
+      color: rgb(139, 107, 82);
       margin: 0;
       font-size: 0.95rem;
       line-height: 1.5;
     }
   }
-  
+
   .item-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 16px;
-    
-    .item-price, .item-total {
-      color: rgb(94, 40, 40); // Sötét vörösesbarna
+
+    .item-price,
+    .item-total {
+      color: rgb(94, 40, 40);
       font-weight: 500;
       font-size: 1.1rem;
       min-width: 100px;
     }
-    
+
     .item-quantity {
       display: flex;
       align-items: center;
       gap: 12px;
-      
+
       span {
         font-size: 1.1rem;
-        color: rgb(94, 40, 40); // Sötét vörösesbarna
+        color: rgb(94, 40, 40);
         min-width: 24px;
         text-align: center;
       }
-      
+
       button[mat-icon-button] {
-        color: rgb(139, 107, 82); // Középső barna
-        background-color: rgba(139, 107, 82, 0.1); // Világos háttér
-        
+        color: rgb(139, 107, 82);
+        background-color: rgba(139, 107, 82, 0.1);
+
         &:hover {
-          background-color: rgba(94, 40, 40, 0.1); // Sötétebb háttér
+          background-color: rgba(94, 40, 40, 0.1);
         }
-        
+
         &[disabled] {
-          color: rgba(139, 107, 82, 0.4); // Halvány barna
+          color: rgba(139, 107, 82, 0.4);
           background-color: rgba(139, 107, 82, 0.05);
         }
       }
     }
   }
-  
+
   .remove-btn {
     position: absolute;
     top: 12px;
     right: 12px;
     color: rgb(139, 107, 82); // Középső barna
-    
+
     &:hover {
       color: rgb(94, 40, 40); // Sötét vörösesbarna
     }
@@ -155,54 +155,54 @@ mat-divider {
 .cart-summary {
   padding: 24px;
   margin-top: 32px;
-  
+
   .total {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
-    
+
     h3 {
       color: rgb(139, 107, 82); // Középső barna
       margin: 0;
       font-size: 1.4rem;
     }
-    
+
     .total-price {
       color: rgb(94, 40, 40); // Sötét vörösesbarna
       font-size: 1.8rem;
       font-weight: 500;
     }
   }
-  
+
   .actions {
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    
+
     button[mat-raised-button] {
       padding: 8px 24px;
       font-size: 1rem;
       font-weight: 500;
-      
+
       mat-icon {
         margin-right: 8px;
         font-size: 20px;
         height: 20px;
         width: 20px;
       }
-      
+
       &[color="warn"] {
         background-color: rgb(139, 107, 82); // Középső barna
-        
+
         &:hover {
           background-color: rgb(94, 40, 40); // Sötét vörösesbarna
         }
       }
-      
+
       &[color="primary"] {
         background-color: rgb(94, 40, 40); // Sötét vörösesbarna
-        
+
         &:hover {
           background-color: rgb(70, 30, 30); // Még sötétebb árnyalat
         }
@@ -215,7 +215,7 @@ mat-divider {
 @media (max-width: 768px) {
   .cart-item {
     flex-direction: column;
-    
+
     .item-image {
       width: 100%;
       height: auto;
@@ -223,18 +223,18 @@ mat-divider {
       margin-right: 0;
       margin-bottom: 16px;
     }
-    
+
     .item-controls {
       flex-direction: column;
       align-items: flex-start;
       gap: 16px;
     }
   }
-  
+
   .cart-summary .actions {
     flex-direction: column;
     gap: 12px;
-    
+
     button {
       width: 100%;
     }
@@ -245,16 +245,16 @@ mat-divider {
   .container {
     padding: 16px;
   }
-  
+
   .cart-item {
     padding: 12px;
-    
+
     .item-quantity {
       width: 100%;
       justify-content: space-between;
     }
   }
-  
+
   .cart-summary {
     padding: 16px;
   }

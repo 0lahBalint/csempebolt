@@ -19,12 +19,14 @@ import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../pipes/search.pipe';
 import { ProductService } from '../../shared/services/product.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     ProductComponent,
     MatToolbarModule,
     MatGridListModule,
@@ -41,19 +43,37 @@ import { Router } from '@angular/router';
     FormsModule,
     SearchPipe
   ],
-  providers: [CartService, ProductService, SearchPipe],
+  providers: [SearchPipe],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss'
 })
 export class ShopComponent implements AfterViewInit, DoCheck {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private cartService: CartService, private productService: ProductService, private router: Router) {
-    this.loadProducts();
+  private productsSub?: Subscription;
+  isLoggedIn = false;
+
+  constructor(private cartService: CartService, private productService: ProductService, private router: Router, private authService: AuthService) {
+    this.authService.currentUser.subscribe(user => {
+      this.isLoggedIn = !!user;
+      if (this.isLoggedIn) {
+        this.loadProducts();
+      } else {
+        if (this.productsSub) {
+          this.productsSub.unsubscribe();
+          this.productsSub = undefined;
+        }
+        this.products = [];
+        this.filteredProducts = [];
+      }
+    });
   }
 
   loadProducts() {
     this.isLoading = true;
+    if (this.productsSub) {
+      this.productsSub.unsubscribe();
+    }
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products = products;
@@ -70,45 +90,41 @@ export class ShopComponent implements AfterViewInit, DoCheck {
   createNewProduct() {
     const newProduct: Omit<Product, 'id'> = {
       name: 'Új termék',
-      price: 0,
-      image: 'assets/default.jpg',
+      price: 1000,
+      image: 'https://decormat.hu/images/tepi/mwsk-z1-225109374/1/m/vinyl-csempe-falra-padlo-barna-ko-textura.jpg',
       description: '',
       featured: false,
       discount: 0,
       categories: []
     };
-    
-    this.productService.createProduct(newProduct).subscribe({
-      next: (product) => {
-        console.log('Termék létrehozva:', product);
-        this.loadProducts(); // Frissítjük a listát
-      },
-      error: (err) => console.error('Hiba a termék létrehozásakor:', err)
+
+    this.productService.createProduct(newProduct).then(product => {
+      console.log('Termék létrehozva:', product);
+      this.loadProducts();
+    }).catch(err => {
+      console.error('Hiba a termék létrehozásakor:', err);
     });
   }
 
-  // Termék frissítése
   updateProduct(product: Product) {
-    this.productService.updateProduct(product.id, product).subscribe({
-      next: (updatedProduct) => {
-        console.log('Termék frissítve:', updatedProduct);
-        this.loadProducts(); // Frissítjük a listát
-      },
-      error: (err) => console.error('Hiba a termék frissítésekor:', err)
+    if (!product.id) return;
+
+    const { id, ...updateData } = product;
+    this.productService.updateProduct(id, updateData).then(() => {
+      console.log('Termék frissítve');
+      this.loadProducts();
+    }).catch(err => {
+      console.error('Hiba a termék frissítésekor:', err);
     });
   }
 
-  // Termék törlése
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     if (confirm('Biztosan törölni szeretnéd ezt a terméket?')) {
-      this.productService.deleteProduct(id).subscribe({
-        next: (success) => {
-          if (success) {
-            console.log('Termék törölve');
-            this.loadProducts(); // Frissítjük a listát
-          }
-        },
-        error: (err) => console.error('Hiba a termék törlésekor:', err)
+      this.productService.deleteProduct(id).then(() => {
+        console.log('Termék törölve');
+        this.loadProducts();
+      }).catch(err => {
+        console.error('Hiba a termék törlésekor:', err);
       });
     }
   }
@@ -121,15 +137,11 @@ export class ShopComponent implements AfterViewInit, DoCheck {
   searchTerm = '';
   previousSearchTerm = '';
   previousFilterState = '';
-  
-  // Lapozás
-  pageSize = 4;
-  pageSizeOptions = [4, 8, 12];
+
   cartItemCount = 0;
 
   ngAfterViewInit() {
     console.log('Shop komponens nézete betöltődött');
-    // Automatikus fókusz a keresőmezőre
     setTimeout(() => {
       this.searchInput.nativeElement.focus();
       console.log('Keresőmező fókuszba került');
@@ -137,14 +149,12 @@ export class ShopComponent implements AfterViewInit, DoCheck {
   }
 
   ngDoCheck() {
-    // Ellenőrizzük a keresési feltétel változását
     if (this.searchTerm !== this.previousSearchTerm) {
       console.log('Keresési feltétel változott:', this.searchTerm);
       this.previousSearchTerm = this.searchTerm;
       this.applyFilters();
     }
 
-    // Ellenőrizzük a szűrők változását
     const currentFilterState = JSON.stringify({
       categories: this.selectedCategoryIds,
       featured: this.showOnlyFeatured
@@ -157,9 +167,8 @@ export class ShopComponent implements AfterViewInit, DoCheck {
     }
   }
 
-  // Egyedi kategóriák kinyerése
   get uniqueCategories() {
-    const categories = new Map<string, {id: string, name: string}>();
+    const categories = new Map<string, { id: string, name: string }>();
     this.products.forEach(product => {
       product.categories?.forEach(category => {
         categories.set(category.id, category);
@@ -168,7 +177,6 @@ export class ShopComponent implements AfterViewInit, DoCheck {
     return Array.from(categories.values());
   }
 
-  // Kategória szűrő váltása
   toggleCategoryFilter(categoryId: string) {
     const index = this.selectedCategoryIds.indexOf(categoryId);
     if (index >= 0) {
@@ -178,10 +186,9 @@ export class ShopComponent implements AfterViewInit, DoCheck {
     }
   }
 
-  // Szűrők alkalmazása
   applyFilters() {
     this.filteredProducts = this.products.filter(product => {
-      const categoryMatch = this.selectedCategoryIds.length === 0 || 
+      const categoryMatch = this.selectedCategoryIds.length === 0 ||
         product.categories?.some(cat => this.selectedCategoryIds.includes(cat.id));
       const featuredMatch = !this.showOnlyFeatured || product.featured;
       return categoryMatch && featuredMatch;
@@ -190,9 +197,9 @@ export class ShopComponent implements AfterViewInit, DoCheck {
     console.log('Szűrt termékek száma:', this.filteredProducts.length);
   }
 
-  // Rendezési függvények
+
   sortByPrice(direction: 'asc' | 'desc') {
-    this.filteredProducts.sort((a, b) => 
+    this.filteredProducts.sort((a, b) =>
       direction === 'asc' ? a.price - b.price : b.price - a.price);
     console.log('Termékek rendezve ár szerint:', direction);
   }
@@ -202,19 +209,16 @@ export class ShopComponent implements AfterViewInit, DoCheck {
     console.log('Termékek rendezve név szerint');
   }
 
-  // Lapozás kezelése
   onPageChange(event: any) {
     console.log('Lapozás:', event);
-    // Implementálható lapozási logika
   }
 
-  // Kosárba helyezés
   addToCart(product: Product) {
-  console.log('Termék hozzáadva a kosárhoz:', product.name);
-  this.cartService.addToCart(product);
-  this.cartItemCount = this.cartService.getCartItems().length;
-}
+    console.log('Termék hozzáadva a kosárhoz:', product.name);
+    this.cartService.addToCart(product);
+    this.cartItemCount = this.cartService.getCartItems().length;
+  }
   navigateToCart() {
-  this.router.navigate(['/cart']);
-}
+    this.router.navigate(['/cart']);
+  }
 }

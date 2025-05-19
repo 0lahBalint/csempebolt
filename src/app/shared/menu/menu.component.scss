@@ -1,20 +1,20 @@
 mat-nav-list {
   min-width: 200px;
-  background-color: #d2b48c; /* klasszikus világosbarna */
+  background-color: #d2b48c;
   padding: 8px 0;
   height: 100vh;
 }
 
 a {
   text-decoration: none;
-  color: #5a3e36; /* sötétbarna szöveg */
+  color: #5a3e36;
   font-size: 16px;
   border-radius: 0 !important;
   transition: all 0.3s ease;
 }
 
 a:hover {
-  background-color: rgba(139, 69, 19, 0.1); /* barna hover effekt */
+  background-color: rgba(139, 69, 19, 0.1);
 }
 
 .mdc-list-item {
@@ -26,32 +26,31 @@ a:hover {
 }
 
 .active-list-item {
-  background-color: #cd853f !important; /* sárgásbarna aktív elem */
+  background-color: #cd853f !important;
   color: white !important;
   font-weight: bold;
 }
 
 mat-icon[matListItemIcon] {
   margin-right: 16px;
-  color: #5a3e36; /* sötétbarna ikonok */
+  color: #5a3e36;
 }
 
 .active-list-item mat-icon[matListItemIcon] {
-  color: white !important; /* fehér ikonok aktív állapotban */
+  color: white !important;
 }
 
-/* Átlátszatlan háttér */
+
 .mat-mdc-dialog-container .mdc-dialog__surface {
   background-color: #d2b48c !important;
   border-radius: 0 !important;
 }
 
-/* Árnyék hozzáadása */
 mat-nav-list {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Reszponzív stílusok */
+
 @media (max-width: 600px) {
   mat-nav-list {
     width: 100%;

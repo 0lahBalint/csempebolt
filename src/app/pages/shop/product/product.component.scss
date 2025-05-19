@@ -6,6 +6,23 @@
     transition: transform 0.3s ease;
 }
 
+.product-card {
+    transition: all 0.3s ease;
+    margin: 16px;
+
+    &.featured {
+        border: 2px solid #ffd700;
+        box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+        transform: scale(1.02);
+    }
+
+    .mat-card-header {
+        .mat-card-title {
+            font-weight: bold;
+        }
+    }
+}
+
 .product-card:hover {
     transform: translateY(-5px);
 }
@@ -52,12 +69,9 @@
 .shop:hover {
     background-color: rgb(139, 107, 82);
 }
-.featured-product {
-    border: 2px solid rgb(94, 40, 40);
-    position: relative;
-}
 
-.featured-product::before {
+
+.featured-product {
     content: '⭐ Kiemelt';
     position: absolute;
     top: 10px;
@@ -68,11 +82,13 @@
     border-radius: 4px;
     font-size: 12px;
 }
+
 .discount-price {
     color: rgb(200, 50, 50);
     font-weight: bold;
     margin-left: 8px;
 }
+
 .price-container {
     margin-bottom: 15px;
 }

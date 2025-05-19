@@ -13,7 +13,6 @@ export class HomeComponent {
   isLoggedIn: boolean = false;
 
   constructor(private router: Router) {
-    // Ellenőrizzük a bejelentkezési állapotot
     this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   }
 

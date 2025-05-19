@@ -16,11 +16,15 @@ import { Router } from '@angular/router';
   providers: [CurrencyPipe]
 })
 export class CartComponent {
+  cartItems: any[] = [];
+
   constructor(
     public cartService: CartService,
     private currencyPipe: CurrencyPipe,
     private router: Router
-  ) {}
+  ) {
+    this.cartItems = this.cartService.getCartItems();
+  }
 
   formatPrice(price: number): string {
     return this.currencyPipe.transform(price, 'HUF', 'symbol', '1.0-0') || '';

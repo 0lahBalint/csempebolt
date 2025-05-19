@@ -11,32 +11,29 @@
   <img mat-card-image [src]="product.image" [alt]="product.name" class="product-image">
 
   <mat-card-content *ngIf="!isEditing">
-  <p>{{ product.description }}</p>
-  <p class="price">
-    Ár: {{ product.price | currency:'HUF':'symbol':'1.0-0' }}
-    <span *ngIf="product.discount > 0" class="discount">
+    <p>{{ product.description }}</p>
+    <p class="price">
+      Ár: {{ product.price | currency:'HUF':'symbol':'1.0-0' }}
+      <span *ngIf="product.discount > 0" class="discount">
         (Akció: {{ product.price | discountPrice:product.discount | currency:'HUF':'symbol':'1.0-0' }})
-    </span>
-  </p>
-</mat-card-content>
+      </span>
+    </p>
+  </mat-card-content>
 
-  <mat-card-content *ngIf="isEditing">
+  <mat-card-content *ngIf="isEditing && editedProduct">
     <mat-form-field>
       <input matInput [(ngModel)]="editedProduct.name" placeholder="Név">
     </mat-form-field>
     <mat-form-field>
       <input matInput type="number" [(ngModel)]="editedProduct.price" placeholder="Ár">
     </mat-form-field>
-    <!-- További szerkesztési mezők -->
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-flat-button 
-            [color]="isInCart ? 'warn' : 'primary'" 
-            (click)="onAddToCart()">
+    <button mat-flat-button [color]="isInCart ? 'warn' : 'primary'" (click)="onAddToCart()">
       {{ isInCart ? 'Kosárban' : 'Kosárba' }}
     </button>
-    
+
     <div *ngIf="!isEditing" class="admin-actions">
       <button mat-icon-button (click)="startEditing()">
         <mat-icon>edit</mat-icon>

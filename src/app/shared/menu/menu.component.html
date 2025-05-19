@@ -6,21 +6,21 @@
   @if (!isLoggedIn) {
     <a mat-list-item routerLink="/login" routerLinkActive="active-list-item" (click)="closeMenu()">
       <mat-icon matListItemIcon>login</mat-icon>
-      <span matListItemTitle>Login</span>
+      <span matListItemTitle>Bejelentkezés</span>
     </a>
   }
   @if (isLoggedIn) {
     <a mat-list-item (click)="logout()">
       <mat-icon matListItemIcon>logout</mat-icon>
-      <span matListItemTitle>Logout</span>
+      <span matListItemTitle>Kijelentkezés</span>
     </a>
     <a mat-list-item routerLink="/shop" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>checklist</mat-icon>
-      <span matListItemTitle>Shop</span>
+      <mat-icon matListItemIcon>store</mat-icon>
+      <span matListItemTitle>Termékek</span>
     </a>
     <a mat-list-item routerLink="/cart" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>done_all</mat-icon>
-      <span matListItemTitle>Cart</span>
-    </a>  
+      <mat-icon matListItemIcon>shopping_cart</mat-icon>
+      <span matListItemTitle>Kosár</span>
+    </a>
   }
 </mat-nav-list>
