@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access, but only authenticated users can write
+    match /Products/{document=**} {
+  		allow read, write: if request.auth != null;
+		}
+    match /users/{userId} {
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Temporary rule for development (not for production)
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+      // OR for complete open access during development:
+      // allow read, write: if true;
+    }
+  }
+}
